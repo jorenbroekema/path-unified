@@ -1,0 +1,20 @@
+{
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "env": {
+    "node": true,
+    "mocha": true,
+    "es6": true,
+    "browser": true
+  },
+  "extends": ["eslint:recommended"],
+  "rules": {
+    "no-console": 0,
+    "no-unused-vars": 1,
+    "no-control-regex": 0,
+    "comma-dangle": 0,
+    "no-prototype-builtins": 0
+  }
+}
