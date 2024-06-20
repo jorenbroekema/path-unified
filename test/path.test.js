@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { isWindows } from '../src/isWindows.js';
-import { resolve, posix, win32 } from '../src/path.js';
+import { resolve, posix, win32 } from '../src/index.js';
 
 // Couple of smoke tests that are ran in Node LTS both windows & linux
 // Would be nice to add more tests

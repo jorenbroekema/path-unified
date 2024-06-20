@@ -21,13 +21,27 @@ import { resolve } from 'path-unified';
 resolve('foo/bar'); // `/absolute/path/to/foo/bar` or with \'s on windows
 ```
 
-Also possible to default import or grab `win32`/`posix`, to force windows/non-windows env:
+The above usage will internally check whether it's used in Windows or Posix environment and use the correct function accordingly.
+
+Note that the pattern below, if you know which environment (Windows or Posix) you are in, is not great for tree-shaking:
 
 ```js
-import path, { posix } from 'path-unified';
+import path from 'path-unified';
 
 path.resolve('foo/bar'); // `/absolute/path/to/foo/bar` or with \'s on windows
-posix.path.resolve('foo/bar'); // `/absolute/path/to/foo/bar`, always posix style
+```
+
+The reason this isn't great is because bundlers won't be able to know beforehand which environment will be used, and both the win32 and posix functions will be bundled, and it's determined on run-time what the environment is and which half of the functions are actually relevant.
+
+If you know which environment you need beforehand, you should use this instead:
+
+```js
+import path from 'path-unified/win32';
+// or: import { resolve } from 'path-unified/win32';
+
+path.resolve('foo/bar');
+// D:\absolute\path\to\foo\bar
+// (depending on drive + home directory)
 ```
 
 ## How?
@@ -41,24 +55,8 @@ I just copied https://github.com/nodejs/node/blob/v21.5.0/lib/path.js and made s
 - Use a browser-compatible isWindows check
 - Shim `process.cwd()` for browser (should return `'/'`)
 - Add type safety where it was missing
+- Add separate entrypoints for win32/posix which helps tree-shaking when the consumer already knows what the environment will be
 
 > Disclaimer: the tests are just a few smoke tests that I run in both browser & node context, in both linux & windows.
 > Apart from those few tests, I cannot really guarantee that my copy + patch of this built-in module doesn't contain regressions.
 > More tests are a welcome contribution, and do let me know if something breaks.
-
-## Splitting posix/win32 for treeshaking
-
-I'd like to improve the treeshaking capabilities of the `posix`/`win32` imports e.g.:
-
-```js
-import { resolve } from 'path-unified/win32';
-```
-
-which would be easier to treeshake than the current way:
-
-```js
-import { posix } from 'path-unified';
-const { resolve } = posix;
-```
-
-PR's welcome for that, I left it out for now due to personal time constraints

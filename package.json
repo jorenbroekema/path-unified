@@ -13,9 +13,10 @@
   "files": [
     "src"
   ],
-  "module": "./src/path.js",
   "exports": {
-    ".": "./src/path.js"
+    ".": "./src/index.js",
+    "./win32": "./src/win32.js",
+    "./posix": "./src/posix.js"
   },
   "scripts": {
     "format": "npm run format:eslint && npm run format:prettier",

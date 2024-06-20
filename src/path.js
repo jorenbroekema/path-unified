@@ -169,7 +169,7 @@ function _format(sep, pathObject) {
  * @param {...string} args
  * @returns {string}
  */
-function winResolve(...args) {
+export function winResolve(...args) {
   let resolvedDevice = '';
   let resolvedTail = '';
   let resolvedAbsolute = false;
@@ -307,7 +307,7 @@ function winResolve(...args) {
  * @param {string} path
  * @returns {string}
  */
-function winNormalize(path) {
+export function winNormalize(path) {
   validateString(path, 'path');
   const len = path.length;
   if (len === 0) return '.';
@@ -394,7 +394,7 @@ function winNormalize(path) {
  * @param {string} path
  * @returns {boolean}
  */
-function winIsAbsolute(path) {
+export function winIsAbsolute(path) {
   validateString(path, 'path');
   const len = path.length;
   if (len === 0) return false;
@@ -414,7 +414,7 @@ function winIsAbsolute(path) {
  * @param {...string} args
  * @returns {string}
  */
-function winJoin(...args) {
+export function winJoin(...args) {
   if (args.length === 0) return '.';
 
   let joined;
@@ -481,7 +481,7 @@ function winJoin(...args) {
  * @param {string} to
  * @returns {string}
  */
-function winRelative(from, to) {
+export function winRelative(from, to) {
   validateString(from, 'from');
   validateString(to, 'to');
 
@@ -585,7 +585,7 @@ function winRelative(from, to) {
  * @param {string} path
  * @returns {string}
  */
-function winToNamespacedPath(path) {
+export function winToNamespacedPath(path) {
   // Note: this will *probably* throw somewhere.
   if (typeof path !== 'string' || path.length === 0) return path;
 
@@ -618,7 +618,7 @@ function winToNamespacedPath(path) {
  * @param {string} path
  * @returns {string}
  */
-function winDirname(path) {
+export function winDirname(path) {
   validateString(path, 'path');
   const len = path.length;
   if (len === 0) return '.';
@@ -707,7 +707,7 @@ function winDirname(path) {
  * @param {string} [suffix]
  * @returns {string}
  */
-function winBasename(path, suffix) {
+export function winBasename(path, suffix) {
   if (suffix !== undefined) validateString(suffix, 'ext');
   validateString(path, 'path');
   let start = 0;
@@ -791,7 +791,7 @@ function winBasename(path, suffix) {
  * @param {string} path
  * @returns {string}
  */
-function winExtname(path) {
+export function winExtname(path) {
   validateString(path, 'path');
   let start = 0;
   let startDot = -1;
@@ -855,7 +855,18 @@ function winExtname(path) {
   return path.slice(startDot, end);
 }
 
-const winFormat = _format.bind(null, '\\');
+/**
+ * @param {string} sep
+ * @param {{
+ *  dir?: string;
+ *  root?: string;
+ *  base?: string;
+ *  name?: string;
+ *  ext?: string;
+ *  }} pathObject
+ * @returns {string}
+ */
+export const winFormat = _format.bind(null, '\\');
 
 /**
  * @param {string} path
@@ -867,7 +878,7 @@ const winFormat = _format.bind(null, '\\');
  *  ext: string;
  *  }}
  */
-function winParse(path) {
+export function winParse(path) {
   validateString(path, 'path');
 
   const ret = { root: '', dir: '', base: '', ext: '', name: '' };
@@ -1009,8 +1020,8 @@ function winParse(path) {
   return ret;
 }
 
-const winSep = '\\';
-const winDelimiter = ';';
+export const winSep = '\\';
+export const winDelimiter = ';';
 
 const posixCwd = (() => {
   if (platformIsWin32) {
@@ -1032,7 +1043,7 @@ const posixCwd = (() => {
  * @param {...string} args
  * @returns {string}
  */
-function posResolve(...args) {
+export function posResolve(...args) {
   let resolvedPath = '';
   let resolvedAbsolute = false;
 
@@ -1065,7 +1076,7 @@ function posResolve(...args) {
  * @param {string} path
  * @returns {string}
  */
-function posNormalize(path) {
+export function posNormalize(path) {
   validateString(path, 'path');
 
   if (path.length === 0) return '.';
@@ -1089,7 +1100,7 @@ function posNormalize(path) {
  * @param {string} path
  * @returns {boolean}
  */
-function posIsAbsolute(path) {
+export function posIsAbsolute(path) {
   validateString(path, 'path');
   return path.length > 0 && path.charCodeAt(0) === CHAR_FORWARD_SLASH;
 }
@@ -1098,7 +1109,7 @@ function posIsAbsolute(path) {
  * @param {...string} args
  * @returns {string}
  */
-function posJoin(...args) {
+export function posJoin(...args) {
   if (args.length === 0) return '.';
   let joined;
   for (let i = 0; i < args.length; ++i) {
@@ -1118,7 +1129,7 @@ function posJoin(...args) {
  * @param {string} to
  * @returns {string}
  */
-function posRelative(from, to) {
+export function posRelative(from, to) {
   validateString(from, 'from');
   validateString(to, 'to');
 
@@ -1188,7 +1199,7 @@ function posRelative(from, to) {
  * @param {string} path
  * @returns {string}
  */
-function posToNamespacedPath(path) {
+export function posToNamespacedPath(path) {
   // Non-op on posix systems
   return path;
 }
@@ -1197,7 +1208,7 @@ function posToNamespacedPath(path) {
  * @param {string} path
  * @returns {string}
  */
-function posDirname(path) {
+export function posDirname(path) {
   validateString(path, 'path');
   if (path.length === 0) return '.';
   const hasRoot = path.charCodeAt(0) === CHAR_FORWARD_SLASH;
@@ -1225,7 +1236,7 @@ function posDirname(path) {
  * @param {string} [suffix]
  * @returns {string}
  */
-function posBasename(path, suffix) {
+export function posBasename(path, suffix) {
   if (suffix !== undefined) validateString(suffix, 'ext');
   validateString(path, 'path');
 
@@ -1299,7 +1310,7 @@ function posBasename(path, suffix) {
  * @param {string} path
  * @returns {string}
  */
-function posExtname(path) {
+export function posExtname(path) {
   validateString(path, 'path');
   let startDot = -1;
   let startPart = 0;
@@ -1349,7 +1360,18 @@ function posExtname(path) {
   return path.slice(startDot, end);
 }
 
-const posFormat = _format.bind(null, '/');
+/**
+ * @param {string} sep
+ * @param {{
+ *  dir?: string;
+ *  root?: string;
+ *  base?: string;
+ *  name?: string;
+ *  ext?: string;
+ *  }} pathObject
+ * @returns {string}
+ */
+export const posFormat = _format.bind(null, '/');
 
 /**
  * @param {string} path
@@ -1361,7 +1383,7 @@ const posFormat = _format.bind(null, '/');
  *   ext: string;
  *   }}
  */
-function posParse(path) {
+export function posParse(path) {
   validateString(path, 'path');
 
   const ret = { root: '', dir: '', base: '', ext: '', name: '' };
@@ -1436,8 +1458,8 @@ function posParse(path) {
   return ret;
 }
 
-const posSep = '/';
-const posDelimiter = ':';
+export const posSep = '/';
+export const posDelimiter = ':';
 
 // _posix.win32 = _win32.win32 = _win32;
 // _posix.posix = _win32.posix = _posix;
